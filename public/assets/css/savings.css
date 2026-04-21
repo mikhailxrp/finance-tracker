@@ -1,0 +1,472 @@
+/* ─── Секция целей ─────────────────────────────────────────── */
+
+.savings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Сетка карточек ───────────────────────────────────────── */
+
+.goals-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ─── Карточка цели ────────────────────────────────────────── */
+
+.goal-card {
+  flex: 1 1 calc(50% - 8px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 280px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-white);
+  box-shadow: 0 4px 14px rgba(18, 24, 40, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.goal-card--completed {
+  border-color: var(--color-brand-start);
+  box-shadow: 0 4px 14px rgba(23, 209, 179, 0.12);
+}
+
+.goal-card--cancelled {
+  opacity: 0.64;
+}
+
+/* ─── Шапка карточки ───────────────────────────────────────── */
+
+.goal-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.goal-card__icon {
+  flex: 0 0 auto;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.goal-card__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-alt);
+  line-height: 1.2;
+}
+
+.goal-card__status {
+  flex: 0 0 auto;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ─── Прогресс-бар ─────────────────────────────────────────── */
+
+.goal-card__progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.goal-card__progress-track {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: var(--color-border);
+  appearance: none;
+}
+
+.goal-card__progress-track::-webkit-progress-bar {
+  background-color: var(--color-border);
+}
+
+.goal-card__progress-track::-webkit-progress-value {
+  background: linear-gradient(
+    90deg,
+    var(--transactions-brand-start) 0%,
+    var(--transactions-brand-end) 100%
+  );
+}
+
+.goal-card__progress-track::-moz-progress-bar {
+  background: linear-gradient(
+    90deg,
+    var(--transactions-brand-start) 0%,
+    var(--transactions-brand-end) 100%
+  );
+}
+
+.goal-card__progress-value {
+  flex: 0 0 auto;
+  margin: 0;
+  min-width: 42px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+/* ─── Суммы и дедлайн ──────────────────────────────────────── */
+
+.goal-card__amounts {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-main);
+  font-weight: 500;
+}
+
+.goal-card__deadline {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ─── Сообщение об ошибке ──────────────────────────────────── */
+
+.goal-card__error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-danger-dark);
+}
+
+/* ─── Форма пополнения ─────────────────────────────────────── */
+
+.goal-card__contribute {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+.goal-card__contribute-label {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.goal-card__contribute-input {
+  flex: 1 1 120px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-input-bg);
+  color: var(--color-text-main);
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: border-color 0.15s ease;
+}
+
+.goal-card__contribute-input:focus {
+  outline: none;
+  border-color: var(--color-brand-start);
+}
+
+.goal-card__contribute-submit {
+  flex: 0 0 auto;
+  height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--transactions-brand-start) 0%,
+    var(--transactions-brand-end) 100%
+  );
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.goal-card__contribute-submit:hover {
+  opacity: 0.9;
+}
+
+/* ─── Кнопки действий ──────────────────────────────────────── */
+
+.goal-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* форма-обёртка становится прозрачной для флекс-раскладки */
+.goal-card__actions form {
+  display: contents;
+}
+
+.goal-card__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.15s ease;
+}
+
+.goal-card__action:hover {
+  opacity: 0.8;
+}
+
+.goal-card__action--danger {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-danger);
+}
+
+.goal-card__action--danger:hover {
+  opacity: 1;
+  color: var(--color-danger-dark);
+}
+
+/* ─── Карточка-добавление цели ─────────────────────────────── */
+
+.goal-card-add {
+  flex: 1 1 calc(50% - 8px);
+  min-width: 280px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  background: var(--color-bg-soft);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.goal-card-add:hover {
+  border-color: var(--color-brand-start);
+  color: var(--color-brand-start);
+}
+
+.goal-card-add__plus {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.goal-card-add__label {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ─── Модалка ──────────────────────────────────────────────── */
+
+.goal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.goal-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.56);
+}
+
+.goal-modal__content {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 100%);
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--color-white);
+  box-shadow: 0 8px 32px rgba(18, 24, 40, 0.14);
+}
+
+.goal-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-bg-soft);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.goal-modal__close:hover {
+  background: var(--color-border);
+}
+
+.goal-modal__title {
+  margin: 0 0 20px;
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--color-text-alt);
+}
+
+.goal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.goal-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.goal-form__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.goal-form__input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-input-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.goal-form__input:focus {
+  outline: none;
+  border-color: var(--color-brand-start);
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+/* ─── Модалка подтверждения (удаление / отмена) ─────────────── */
+
+.goal-confirm-modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-confirm-modal__lead {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--color-text-main);
+}
+
+.goal-confirm-modal__amount {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-bg-soft);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-alt);
+}
+
+.goal-confirm-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.goal-confirm-modal__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.goal-confirm-modal__btn {
+  flex: 1 1 200px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.15s ease;
+}
+
+.goal-confirm-modal__btn--return {
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    var(--transactions-brand-start) 0%,
+    var(--transactions-brand-end) 100%
+  );
+  color: #ffffff;
+}
+
+.goal-confirm-modal__btn--return:hover {
+  opacity: 0.92;
+}
+
+.goal-confirm-modal__btn--keep {
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text-main);
+}
+
+.goal-confirm-modal__btn--keep:hover {
+  border-color: var(--color-text-muted);
+}
+
+/* ─── Адаптив ──────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .goal-card,
+  .goal-card-add {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}

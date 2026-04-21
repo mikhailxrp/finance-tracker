@@ -1,0 +1,155 @@
+/* Планировщик покупки на /savings — только flex, без grid */
+
+.purchase-planner-section {
+  margin-top: var(--spacing-lg, 1.5rem);
+}
+
+.purchase-planner-form {
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.purchase-plans-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.purchase-plan-card {
+  flex: 1 1 calc(50% - 8px);
+  min-width: 280px;
+  padding: 16px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-bg-elevated, #fff);
+}
+
+.purchase-plan-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.purchase-plan-card__titles {
+  flex: 1 1 200px;
+}
+
+.purchase-plan-card__title {
+  margin: 0 0 4px;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-alt);
+}
+
+.purchase-plan-card__target {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.purchase-plan-card__term {
+  color: var(--color-text-muted);
+}
+
+.purchase-plan-card__delete-form {
+  flex: 0 0 auto;
+}
+
+.purchase-plan-card__alert {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  background: var(--color-bg-soft);
+}
+
+.purchase-plan-card__strategies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Сценарии внутри карточки плана (как на /credits) */
+.purchase-plan-card__strategies .strategy-card {
+  flex: 1 1 calc(33.333% - 10px);
+  min-width: 200px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg-soft);
+}
+
+.purchase-plan-card__strategies .strategy-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.purchase-plan-card__strategies .strategy-card__emoji {
+  flex: 0 0 auto;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.purchase-plan-card__strategies .strategy-card__titles {
+  flex: 1 1 auto;
+}
+
+.purchase-plan-card__strategies .strategy-card__label {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-alt);
+}
+
+.purchase-plan-card__strategies .strategy-card__hint {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+
+.purchase-plan-card__strategies .strategy-card__stats {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.purchase-plan-card__strategies .strategy-card__stat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.purchase-plan-card__strategies .strategy-card__dt {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.purchase-plan-card__strategies .strategy-card__dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+@media (max-width: 767px) {
+  .purchase-plan-card {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .purchase-plan-card__strategies .strategy-card {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+}

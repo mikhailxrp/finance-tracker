@@ -1,0 +1,58 @@
+/**
+ * Submit loader styles.
+ * Переменные определены в main.css
+ */
+form[data-submit-loading] {
+  position: relative;
+}
+
+form[data-submit-loading][aria-busy='true'] {
+  pointer-events: none;
+}
+
+.submit-loader__overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--submit-loader-overlay-gap);
+  background: var(--submit-loader-overlay-bg);
+  border-radius: 12px;
+  font-size: var(--submit-loader-overlay-font-size);
+  font-weight: 600;
+  color: var(--submit-loader-overlay-text-color);
+  z-index: 3;
+}
+
+form[data-submit-loading][aria-busy='true'][data-submit-overlay='true'] .submit-loader__overlay {
+  display: inline-flex;
+}
+
+.submit-loader__spinner,
+button[type='submit'][data-is-loading='true']::before {
+  width: var(--submit-loader-spinner-size);
+  height: var(--submit-loader-spinner-size);
+  border: var(--submit-loader-spinner-border) solid rgba(79, 142, 247, 0.28);
+  border-top-color: var(--submit-loader-spinner-color);
+  border-radius: 50%;
+  animation: submit-loader-spin 0.75s linear infinite;
+}
+
+button[type='submit'][data-is-loading='true'] {
+  cursor: wait;
+  opacity: 0.86;
+}
+
+button[type='submit'][data-is-loading='true']::before {
+  content: '';
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: text-bottom;
+}
+
+@keyframes submit-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

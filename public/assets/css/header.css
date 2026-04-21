@@ -1,0 +1,151 @@
+/**
+ * Шапка приложения (только защищённые страницы).
+ * Переменные определены в main.css
+ */
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: var(--header-padding-y) var(--header-padding-x);
+  background: var(--header-bg);
+  border-bottom: 1px solid #e9ecef;
+}
+
+.app-header__period {
+  flex-shrink: 0;
+}
+
+.period-switch__track {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  background: var(--header-switcher-bg);
+  border-radius: 50px;
+  gap: 2px;
+}
+
+.period-switch__pill {
+  margin: 0;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  cursor: default;
+  background: linear-gradient(
+    90deg,
+    var(--header-gradient-start) 0%,
+    var(--header-gradient-end) 100%
+  );
+  box-shadow: 0 1px 3px rgba(72, 149, 239, 0.35);
+}
+
+.period-switch__btn {
+  margin: 0;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--header-text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.period-switch__btn:hover {
+  color: var(--header-text-name);
+}
+
+.app-header__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 22px;
+}
+
+.app-header__theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: var(--header-moon-color);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.app-header__theme:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.app-header__theme svg {
+  display: block;
+}
+
+.app-header__profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-header__avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--header-gradient-start) 0%,
+    var(--header-gradient-end) 100%
+  );
+}
+
+.app-header__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.25;
+}
+
+.app-header__name {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--header-text-name);
+}
+
+.app-header__email {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--header-text-muted);
+}
+
+@media (min-width: 320px) and (max-width: 576px) {
+  .app-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 64px;
+    padding: var(--header-padding-y) var(--header-padding-x);
+    background: var(--header-bg);
+    border-bottom: 1px solid #e9ecef;
+  }
+}

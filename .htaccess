@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Приложение в подкаталоге сайта — укажи базу (иначе оставь закомментированным):
+  # RewriteBase /finance-tracker/
+
+  # Прямой доступ к секретам и служебным каталогам запрещён
+  RewriteRule ^\.env$ - [F,L]
+  RewriteRule ^(src|config|database|vendor)(/|$) - [F,L]
+
+  # Уже запрос к public/ — не трогаем (если DocumentRoot = корень проекта)
+  RewriteRule ^public/ - [L]
+
+  # Статический файл внутри public/
+  RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+  RewriteRule ^(.*)$ public/$1 [L]
+
+  # Существующий каталог внутри public/
+  RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+  RewriteRule ^(.*)$ public/$1 [L]
+
+  # Всё остальное — front controller
+  RewriteRule ^ public/index.php [QSA,L]
+</IfModule>
+
+Options -Indexes
