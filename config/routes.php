@@ -10,6 +10,7 @@ return [
   'GET' => [
     '/' => ['DashboardController', 'index'],
     '/dashboard' => ['DashboardController', 'index'],
+    '/strategy' => ['AiStrategyController', 'index'],
     '/transactions' => ['TransactionController', 'index'],
     '/income' => ['TransactionController', 'income'],
     '/expenses' => ['TransactionController', 'expenses'],
@@ -26,6 +27,7 @@ return [
     '/category/{id}/delete' => ['CategoryController', 'delete'],
   ],
   'POST' => [
+    '/strategy/generate' => ['AiStrategyController', 'generate'],
     '/transactions' => ['TransactionController', 'store'],
     '/income' => ['TransactionController', 'storeIncome'],
     '/expenses' => ['TransactionController', 'storeExpense'],

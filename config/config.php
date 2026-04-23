@@ -14,6 +14,7 @@ loadEnv(dirname(__DIR__) . '/.env');
 define('ROOT_PATH', dirname(__DIR__));
 define('APP_ENV', env('APP_ENV'));
 define('APP_URL', env('APP_URL'));
+define('N8N_WEBHOOK_URL', env('N8N_WEBHOOK_URL', ''));
 
 /** Каталог логов (по умолчанию `storage/logs` от корня проекта). */
 define('LOG_DIR', env('LOG_DIR', ROOT_PATH . '/storage/logs'));

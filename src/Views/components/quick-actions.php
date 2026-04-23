@@ -6,7 +6,7 @@ $selectedPeriod = isset($selectedPeriod) && is_string($selectedPeriod) ? $select
 $activeAction = isset($activeAction) && is_string($activeAction) ? $activeAction : '';
 $showDashboardLink = isset($showDashboardLink) && $showDashboardLink === true;
 
-$allowedActions = ['goals', 'credits', 'expense', 'income'];
+$allowedActions = ['goals', 'strategy', 'credits', 'expense', 'income'];
 if (!in_array($activeAction, $allowedActions, true)) {
   $activeAction = '';
 }
@@ -23,6 +23,11 @@ $actions = [
     'id' => 'goals',
     'label' => 'Цели',
     'href' => '/savings?period=' . rawurlencode($selectedPeriod),
+  ],
+  [
+    'id' => 'strategy',
+    'label' => 'Финансовая стратегия',
+    'href' => '/strategy?period=' . rawurlencode($selectedPeriod),
   ],
   [
     'id' => 'credits',
