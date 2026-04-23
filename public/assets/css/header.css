@@ -95,6 +95,98 @@
   gap: 12px;
 }
 
+.app-header__profile-wrapper {
+  position: relative;
+}
+
+.app-header__profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: opacity 0.2s;
+}
+
+.app-header__profile-button:hover {
+  opacity: 0.85;
+}
+
+.app-header__profile-chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform 0.2s;
+}
+
+.app-header__profile-button[aria-expanded="true"] .app-header__profile-chevron {
+  transform: rotate(180deg);
+}
+
+.app-header__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+  min-width: 220px;
+  padding: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.app-header__dropdown[hidden] {
+  display: none;
+}
+
+.app-header__dropdown-form {
+  margin: 0;
+}
+
+.app-header__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-main);
+  text-align: left;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.app-header__dropdown-item:hover {
+  background: var(--color-bg-soft);
+}
+
+.app-header__dropdown-item svg {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.app-header__dropdown-item--logout {
+  color: var(--color-danger);
+}
+
+.app-header__dropdown-item--logout svg {
+  color: var(--color-danger);
+}
+
+.app-header__dropdown-item--logout:hover {
+  background: #fee;
+}
+
 .app-header__avatar {
   display: grid;
   flex-shrink: 0;

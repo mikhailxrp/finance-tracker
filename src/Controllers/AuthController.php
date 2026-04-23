@@ -14,6 +14,9 @@ use Throwable;
 
 final class AuthController
 {
+  private const CSRF_SESSION_KEY = 'auth_csrf';
+  private const CSRF_EXPIRED_MESSAGE = 'Сессия устарела. Обновите страницу и попробуйте снова.';
+
   private const MIN_PASSWORD_LENGTH = 8;
   private const LOGIN_ERROR_MESSAGE = 'Неверный email или пароль';
   private const VERIFY_TOKEN_TTL_SECONDS = 172800;
@@ -27,13 +30,20 @@ final class AuthController
 
     $error = \getFlash('login_error');
     $notice = \getFlash('login_notice');
+    $csrf = $this->ensureCsrfToken();
 
     header('Content-Type: text/html; charset=utf-8');
-    \render('auth/login', ['error' => $error, 'notice' => $notice]);
+    \render('auth/login', ['error' => $error, 'notice' => $notice, 'csrf' => $csrf]);
   }
 
   public function login(): void
   {
+    $csrf = (string) \input('csrf', '');
+    if (!$this->isValidCsrfToken($csrf)) {
+      \setFlash('login_error', self::CSRF_EXPIRED_MESSAGE);
+      \redirect('/login');
+    }
+
     $email = mb_strtolower((string) \input('email', ''));
     $password = (string) \input('password', '');
 
@@ -85,9 +95,10 @@ final class AuthController
     \redirectIfAuthenticated();
 
     $error = \getFlash('register_error');
+    $csrf = $this->ensureCsrfToken();
 
     header('Content-Type: text/html; charset=utf-8');
-    \render('auth/register', ['error' => $error]);
+    \render('auth/register', ['error' => $error, 'csrf' => $csrf]);
   }
 
   public function showForgotPassword(): void
@@ -96,16 +107,24 @@ final class AuthController
 
     $error = \getFlash('forgot_password_error');
     $notice = \getFlash('forgot_password_notice');
+    $csrf = $this->ensureCsrfToken();
 
     header('Content-Type: text/html; charset=utf-8');
     \render('auth/forgot-password', [
       'error' => $error,
       'notice' => $notice,
+      'csrf' => $csrf,
     ]);
   }
 
   public function sendResetLink(): void
   {
+    $csrf = (string) \input('csrf', '');
+    if (!$this->isValidCsrfToken($csrf)) {
+      \setFlash('forgot_password_error', self::CSRF_EXPIRED_MESSAGE);
+      \redirect('/forgot-password');
+    }
+
     $email = mb_strtolower((string) \input('email', ''));
     if ($email === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
       \setFlash('forgot_password_error', 'Укажите корректный email.');
@@ -176,17 +195,26 @@ final class AuthController
     }
 
     $error = \getFlash('reset_password_error');
+    $csrf = $this->ensureCsrfToken();
 
     header('Content-Type: text/html; charset=utf-8');
     \render('auth/reset-password', [
       'token' => $token,
       'error' => $error,
+      'csrf' => $csrf,
     ]);
   }
 
   public function resetPassword(): void
   {
     $token = (string) \input('token', '');
+
+    $csrf = (string) \input('csrf', '');
+    if (!$this->isValidCsrfToken($csrf)) {
+      \setFlash('forgot_password_error', self::CSRF_EXPIRED_MESSAGE);
+      \redirect('/forgot-password');
+    }
+
     $password = (string) \input('password', '');
     $passwordConfirm = (string) \input('password_confirm', '');
 
@@ -257,6 +285,12 @@ final class AuthController
 
   public function register(): void
   {
+    $csrf = (string) \input('csrf', '');
+    if (!$this->isValidCsrfToken($csrf)) {
+      \setFlash('register_error', self::CSRF_EXPIRED_MESSAGE);
+      \redirect('/register');
+    }
+
     $name = (string) \input('name', '');
     $email = mb_strtolower((string) \input('email', ''));
     $password = (string) \input('password', '');
@@ -292,8 +326,6 @@ final class AuthController
       $tokenHash = hash('sha256', $plainToken);
       $updToken = $pdo->prepare('UPDATE users SET email_token = ? WHERE id = ?');
       $updToken->execute([$tokenHash, $newUserId]);
-
-      $this->createSystemCategoriesForUser($pdo, $newUserId);
 
       $pdo->commit();
 
@@ -516,6 +548,12 @@ final class AuthController
   public function logout(): void
   {
     \ensureSessionStarted();
+    $csrf = (string) \input('csrf', '');
+    if (!$this->isValidCsrfToken($csrf)) {
+      \setFlash('login_error', self::CSRF_EXPIRED_MESSAGE);
+      \redirect('/login');
+    }
+
     $_SESSION = [];
 
     if (ini_get('session.use_cookies')) {
@@ -531,6 +569,26 @@ final class AuthController
 
     session_destroy();
     \redirect('/login');
+  }
+
+  private function ensureCsrfToken(): string
+  {
+    \ensureSessionStarted();
+    $token = $_SESSION[self::CSRF_SESSION_KEY] ?? null;
+    if (!is_string($token) || $token === '') {
+      $token = bin2hex(random_bytes(32));
+      $_SESSION[self::CSRF_SESSION_KEY] = $token;
+    }
+
+    return $token;
+  }
+
+  private function isValidCsrfToken(string $token): bool
+  {
+    \ensureSessionStarted();
+    $sessionToken = $_SESSION[self::CSRF_SESSION_KEY] ?? '';
+
+    return $token !== '' && is_string($sessionToken) && $sessionToken !== '' && hash_equals($sessionToken, $token);
   }
 
   private function validateRegistration(string $name, string $email, string $password, string $passwordConfirm): ?string
@@ -552,29 +610,6 @@ final class AuthController
     }
 
     return null;
-  }
-
-  private function createSystemCategoriesForUser(PDO $pdo, int $userId): void
-  {
-    $fetchSystem = $pdo->query('SELECT name, type, icon, color FROM categories WHERE user_id IS NULL');
-    $rows = $fetchSystem->fetchAll(PDO::FETCH_ASSOC);
-    if ($rows === []) {
-      return;
-    }
-
-    $insert = $pdo->prepare(
-      'INSERT INTO categories (user_id, name, type, icon, color) VALUES (?, ?, ?, ?, ?)'
-    );
-
-    foreach ($rows as $row) {
-      $insert->execute([
-        $userId,
-        (string) ($row['name'] ?? ''),
-        (string) ($row['type'] ?? ''),
-        (string) ($row['icon'] ?? ''),
-        (string) ($row['color'] ?? '#6B7280'),
-      ]);
-    }
   }
 
   private function buildVerificationPlainToken(int $userId): string

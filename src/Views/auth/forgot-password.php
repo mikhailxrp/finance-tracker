@@ -41,6 +41,7 @@ declare(strict_types=1);
           <?php endif; ?>
 
           <form method="POST" action="/forgot-password" data-submit-loading data-submit-overlay="true" data-loading-text="Отправка...">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
             <label class="form-label" for="email">Email</label>
             <input id="email" class="form-field" type="email" name="email" placeholder="alex@example.com" required>
 

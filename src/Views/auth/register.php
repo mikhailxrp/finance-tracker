@@ -44,6 +44,7 @@ declare(strict_types=1);
           <?php endif; ?>
 
           <form method="POST" action="/register" data-submit-loading data-submit-overlay="true" data-loading-text="Регистрация...">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
             <label class="form-label" for="name">Имя</label>
             <input id="name" class="form-field" type="text" name="name" placeholder="Алексей Петров" required>
 

@@ -505,3 +505,101 @@
 
 - Все пункты приёмки и документирования Phase 4 из текущего `TASK.md` отмечены как выполненные.
 - Phase 4 переведена в статус «✅ Завершена», подготовлена база для перехода к Phase 5.
+
+---
+
+**Дата:** 23.04.2026
+
+**Что сделано (Phase 5, TASK.md — Таск 1 «Профиль и настройки пользователя»):**
+
+- Реализован профиль пользователя: добавлен `src/Controllers/ProfileController.php` с методами `index()`, `updateName()`, `changePassword()`; доступ только после `requireAuth()`.
+- Реализована модель `src/Models/User.php`: получение пользователя по `id`, обновление имени, смена `password_hash`, сбор статистики (транзакции, активные цели, AI-стратегии) через PDO prepared statements.
+- Добавлены маршруты в `config/routes.php`: `GET /profile`, `POST /profile/update-name`, `POST /profile/change-password`.
+- Создана страница `src/Views/profile.php`: карточка пользователя (инициалы, имя, email, дата регистрации, статистика), форма редактирования имени, форма смены пароля, read-only email с подсказкой.
+- Добавлены стили `public/assets/css/profile.css` в mobile-first подходе; layout страницы выполнен на flex, без grid.
+- Для полей пароля на странице профиля добавлен toggle видимости (кнопка-глаз) с использованием `public/assets/js/password-toggle.js`.
+- Обновлён хедер `src/Views/components/header.php`: вместо простой ссылки реализовано выпадающее submenu профиля с пунктами «Дашборд», «Профиль», «Выйти».
+- Кнопка «Выйти» перенесена с `src/Views/dashboard.php` в submenu пользователя; добавлен `public/assets/js/header-dropdown.js` (открытие/закрытие по клику, клик вне, Esc) и стили dropdown в `public/assets/css/header.css`.
+- Скрипт submenu подключён на защищённых страницах (`dashboard`, `profile`, `transactions`, `income`, `expenses`, `savings`, `credits`, `strategy`) для единообразного поведения шапки.
+- Проверки качества: `php -l` для изменённых PHP-файлов, `node --check` для нового JS и `ReadLints` по затронутым файлам — без ошибок.
+
+**Итог по DoD Таска 1:**
+
+- Функциональность профиля реализована в рамках текущего `TASK.md`: просмотр данных пользователя, изменение имени, смена пароля, CSRF-защита и валидации.
+- UI шапки улучшен: пользовательское submenu соответствует текущему дизайну и включает сценарии навигации и выхода.
+
+---
+
+**Дата:** 23.04.2026
+
+**Что сделано (Phase 5, TASK.md — Таск 2 «Управление категориями (CRUD) на странице профиля»):**
+
+- Реализован CRUD категорий на странице профиля `/profile` без отдельной страницы категорий: добавлен блок «Мои категории» с секциями «Доходы» и «Расходы».
+- Расширен `src/Models/Category.php`: добавлены `getAllForUser()`, `findByIdForUser()`, `create()`, `update()`, `delete()`, нормализация цвета и дедупликация категорий по `type + name`.
+- Реализован `src/Controllers/CategoryController.php`: методы `create()`, `update()`, `delete()` с `requireAuth()`, CSRF-проверкой, валидацией входных данных, проверкой владения (`user_id`) и обработкой FK-ошибки удаления (`Нельзя удалить категорию, используемую в транзакциях`).
+- Обновлён `config/routes.php`: добавлены `POST /categories/create`, `POST /categories/update`, `POST /categories/delete`; удалён устаревший `GET /category/{id}/delete`.
+- Обновлён `src/Controllers/ProfileController.php`: в `index()` подгружаются категории через `Category::getAllForUser()`, добавлены flash-ключи для операций категорий.
+- Обновлён `src/Views/profile.php`: добавлен UI управления категориями, подключены компоненты карточки/модалки, вывод success/error flash, подключён `public/assets/js/categories.js`.
+- Созданы компоненты `src/Views/components/category-card.php` и `src/Views/components/category-form-modal.php` с безопасным выводом `htmlspecialchars()`, разделением системных/пользовательских категорий и формами create/update/delete.
+- Добавлен `public/assets/js/categories.js`: открытие/закрытие модалки (кнопка, backdrop, крестик, Esc), префилл формы при редактировании, переключение action create/update, confirm перед удалением.
+- Доработан `public/assets/css/profile.css`: стили секции категорий, карточек, бейджа «Системная», модалки и адаптивного flex-layout.
+- Исправлена причина дубликатов категорий: в `src/Controllers/AuthController.php` удалено копирование системных категорий в пользовательские при регистрации (удалён вызов и метод `createSystemCategoriesForUser()`).
+- Добавлена SQL-миграция `database/migrations/remove_duplicate_categories.sql` для безопасной очистки исторических дублей (с отдельными шагами: аудит, удаление без транзакций, опциональная перепривязка транзакций).
+- Проверки качества: `php -l` по изменённым PHP-файлам и `ReadLints` по затронутым файлам — без ошибок.
+
+**Итог по DoD Таска 2:**
+
+- Все пункты раздела `Definition of Done` в текущем `TASK.md` проверены и отмечены как выполненные.
+- Категории управляются только на `/profile`, системные категории read-only, пользовательские категории доступны для CRUD с серверной защитой и валидацией.
+
+---
+
+**Дата:** 23.04.2026
+
+**Что сделано (Phase 5, TASK.md — Таск 3 «Мобильная адаптация и кросс-браузерность», проверка DoD):**
+
+- Проведена ручная проверка всех пунктов `Definition of Done` из `TASK.md` по мобильной адаптации и кросс-браузерности.
+- Подтверждена работа мобильной навигации: гамбургер-меню, overlay, закрытие по backdrop/крестику/Esc, блокировка скролла при открытом меню.
+- Проверены брейкпоинты `320`, `375`, `768`, `1024`, `1440`: layout не ломается, карточки/формы/модалки адаптивны, критичных визуальных дефектов не найдено.
+- Подтверждена адаптивность ключевых блоков UI: карточки, формы, таблицы, графики, header и sidebar; требования проекта `flex` без `grid` соблюдены.
+- Выполнена кросс-браузерная проверка в Chrome, Firefox и Safari: критичных несовместимостей и ошибок в консоли не выявлено.
+- Пройдены регрессионные проверки сценариев Phase 1–5 на мобильных экранах: Auth, Dashboard, Transactions, Goals, Credits, Purchase Planner, AI-Strategy, Profile/Categories.
+
+**Итог по DoD Таска 3:**
+
+- Все пункты раздела `Definition of Done` в текущем `TASK.md` отмечены как выполненные (`[x]`).
+- Таск 3 («Мобильная адаптация и кросс-браузерность») готов к закрытию в рамках Phase 5.
+
+---
+
+**Дата:** 23.04.2026 — Phase 5 завершена
+
+**Что сделано (Phase 5, TASK.md — Таск 4 «Финальный аудит безопасности и приёмка MVP»):**
+
+- Подготовлен `README.md`: требования, локальная установка, деплой на shared-hosting, переменные окружения, безопасность и структура проекта.
+- Актуализирован `.env.example`: добавлены SMTP-переменные (`MAIL_*`), сохранены актуальные параметры БД, логирования и n8n.
+- Создан финальный отчёт фазы: `.docs/phases/phase-5-report.md`.
+- Обновлён статус фазы в `.docs/phases/_status.md`: Phase 5 → `✅ Завершена`.
+- Синхронизирован финальный `TASK.md` с задачей приёмки MVP (документационный и контрольный scope).
+
+**Итог по MVP:**
+
+- Все фазы roadmap (0-5) закрыты.
+- Блоки Auth, Transactions/Dashboard, Goals/Credits/Planner, AI Strategy, Profile/Categories реализованы и прошли фазовую приёмку.
+- Приложение подготовлено к финальному прогону на целевом окружении и деплою.
+
+---
+
+**Дата:** 24.04.2026
+
+**Что сделано (текущий `TASK.md` — «CSRF-защита в auth-формах» перед деплоем):**
+
+- В `src/Controllers/AuthController.php` добавлена CSRF-защита по паттерну `ProfileController`: константа `CSRF_SESSION_KEY = 'auth_csrf'`, приватные `ensureCsrfToken()` и `isValidCsrfToken()`.
+- В GET-обработчиках `showLogin()`, `showRegister()`, `showForgotPassword()`, `showResetPassword()` вызывается `ensureCsrfToken()`; токен передаётся в представления как `$csrf`.
+- В POST-обработчиках `login()`, `register()`, `logout()`, `sendResetLink()`, `resetPassword()` выполняется проверка `isValidCsrfToken()` с редиректом и flash при невалидном/отсутствующем токене.
+- В шаблонах `src/Views/auth/login.php`, `register.php`, `forgot-password.php`, `reset-password.php` добавлено скрытое поле `<input type="hidden" name="csrf" value="<?= e($csrf) ?>">`.
+- Для `POST /logout` в `src/Views/components/header.php` добавлено скрытое поле `csrf` с сессионным ключом, согласованным с `AuthController` (инициализация `auth_csrf` при отсутствии токена в сессии).
+
+**Итог по DoD:**
+
+- Сценарии `POST` для login, register, logout, forgot-password, reset-password защищены от CSRF; легитимные сценарии и `verify_email` (отдельный `verify_csrf`) не нарушены; пункты `Definition of Done` в текущем `TASK.md` отмечены как выполненные.

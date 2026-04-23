@@ -118,6 +118,7 @@ $periodLabels = [
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/header-dropdown.js"></script>
     <script type="module" src="/assets/js/strategy.js"></script>
   </body>
 </html>

@@ -39,6 +39,7 @@ declare(strict_types=1);
 
           <form method="POST" action="/reset-password" data-submit-loading data-submit-overlay="true" data-loading-text="Сохранение...">
             <input type="hidden" name="token" value="<?= htmlspecialchars((string) ($token ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
 
             <label class="form-label" for="password">Новый пароль</label>
             <div class="password-wrap">
